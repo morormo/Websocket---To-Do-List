@@ -1,9 +1,11 @@
 const express = require('express');
 const socket = require('socket.io');
+const cors = require('cors')
 
 const app = express();
+app.use(cors());
 
-let tasks = [];
+let tasks = ['Shopping', 'Go out with a dog'];
 
 const server = app.listen(process.env.PORT || 8000, () => {
   console.log('Server is running...');
