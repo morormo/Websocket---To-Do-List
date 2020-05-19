@@ -1,0 +1,16 @@
+{
+  "name": "Websocket---To-Do-List",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:morormo/Websocket---To-Do-List.git",
+  "author": "Morormo <morormo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "socket.io": "^2.3.0"
+  }
+}
