@@ -1,5 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
+import {v4 as uuidv4} from 'uuid';
 
 class App extends React.Component {
 
@@ -13,8 +14,8 @@ class App extends React.Component {
     this.socket.on('addTask', newTask => {
       this.addTask(newTask);
     });
-    this.socket.on('removeTask', idTask => {
-      this.removeTask(idTask);
+    this.socket.on('removeTask', removedTask => {
+      this.removeTask(removedTask);
     });
     this.socket.on('updateData', allTasks => {
       this.updateTasks(allTasks);
@@ -25,17 +26,18 @@ class App extends React.Component {
   removeTask(task, source) {
     const {tasks} = this.state;
     console.log(task, source);
-    this.setState({ tasks: tasks.filter(element => {return tasks.indexOf(element) !== task })});
+    this.setState({ tasks: tasks.filter(element => {return element.id !== task.id })});
 
-    if(source != undefined) {
+    if(source !== undefined) {
       this.socket.emit('removeTask', task);
     }
   }ą
 
   submitForm(e) {
     e.preventDefault();
-    this.addTask(this.state.taskName);
-    this.socket.emit('addTask', this.state.taskName);
+    const id = uuidv4();
+    this.addTask({id: id, name: this.state.taskName});
+    this.socket.emit('addTask', ({id: id, name: this.state.taskName}));
     this.setState({taskName: ''});
   }
 
@@ -60,7 +62,7 @@ class App extends React.Component {
 
           <ul className="tasks-section__list" id="tasks-list">
             {tasks.map(task => (
-              <li key={task} >{task} <button className="btn btn--red" onClick={(e) => this.removeTask(tasks.indexOf(task), 'local')}>Remove</button></li>
+              <li key={task.id} >{task.name} <button className="btn btn--red" onClick={(e) => this.removeTask(task, 'local')}>Remove</button></li>
               ))}
           </ul>
 
